@@ -4,6 +4,7 @@ import Wrapper from './Wrapper';
 import Counter from './Counter';
 import InputSample from './InputSample';
 import './App.css';
+import UserList from './UserList';
 
 function App(){
   const name = 'react';
@@ -27,6 +28,7 @@ function App(){
       </Wrapper>
       <Counter/>
       <InputSample/>
+      <UserList/>
     </>
   );
 }
