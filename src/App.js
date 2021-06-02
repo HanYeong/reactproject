@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState, useMemo, useCallback } from 'react';
 import Hello from './Hello';
 import Wrapper from './Wrapper';
 import Counter from './Counter';
@@ -18,13 +18,16 @@ function App(){
     email: ''
   });
   const { username, email } = inputs;
-  const onChange = e => {
-    const { name, value } = e.target;
-    setInputs({
-      ...inputs,
-      [name]: value
-    });
-  };
+  const onChange = useCallback(
+    e => {
+      const { name, value } = e.target;
+      setInputs({
+        ...inputs,
+        [name]: value
+      });
+    },
+    [inputs]
+  );
   const [users, setUsers] = useState([
     {
       id: 1,
@@ -46,29 +49,38 @@ function App(){
     }
   ]);
   const nextId = useRef(4);
-  const onCreate = () => {
+  const onCreate = useCallback(() => {
     const user = {
       id: nextId.current,
       username,
       email
     };
+    setUsers(users.concat(user));
+
     setInputs({
       username: '',
       email: ''
     });
-    setUsers(users.concat(user));
     nextId.current += 1;
-  };
-  const onRemove = id => {
-    setUsers(users.filter(user => user.id !== id));
-  };
-  const onToggle = id => {
-    setUsers(
-      users.map(user =>
-        user.id === id ? { ...user, active: !user.active } : user
-      )
-    );
-  };
+  }, [users, username, email]);
+  const onRemove = useCallback(
+    id => {
+      // user.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
+      // = user.id 가 id 인 것을 제거함
+      setUsers(users.filter(user => user.id !== id));
+    },
+    [users]
+  );
+  const onToggle = useCallback(
+    id => {
+      setUsers(
+        users.map(user =>
+          user.id === id ? { ...user, active: !user.active } : user
+        )
+      );
+    },
+    [users]
+  );
   const name = 'react';
   const style = {
     backgroundColor: 'black',
