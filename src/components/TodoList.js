@@ -20,7 +20,7 @@ function TodoList() {
           id={todo.id}
           text={todo.text}
           done={todo.done}
-        />
+          />
       ))}
     </TodoListBlock>
   );
